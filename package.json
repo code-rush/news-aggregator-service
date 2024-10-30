@@ -1,0 +1,38 @@
+{
+  "name": "news-aggregator-service",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "migrate:up": "npm run build && node -r ts-node/register database/migrate.ts up",
+    "migrate:down": "npm run build && node -r ts-node/register database/migrate.ts down",
+    "migrate:down:all": "npm run build && node -r ts-node/register database/migrate.ts down --to 0",
+    "migrate:create": "npm run build && node -r ts-node/register database/migrate.ts create",
+    "start:dev": "nodemon src/server.ts",
+    "start": "node dist/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.8.4",
+    "@types/uuid": "^10.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "kysely": "^0.27.4",
+    "kysely-migration-cli": "^0.4.2",
+    "pg": "^8.13.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3",
+    "uuid": "^11.0.2"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.10",
+    "@typescript-eslint/eslint-plugin": "^8.12.2",
+    "@typescript-eslint/parser": "^8.12.2",
+    "eslint": "^9.13.0",
+    "eslint-plugin-import": "^2.31.0",
+    "nodemon": "^3.1.7"
+  }
+}

@@ -1,0 +1,59 @@
+networks:
+  local-dev:
+    name: local-dev
+    driver: bridge
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    command: npm run start:dev
+    environment:
+      API_PORT: 9000
+      APP_ENV: development
+      APP_VERSION: 0.0.0
+      POSTGRES_DB: news_aggr_db
+      POSTGRES_HOST: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_VERSION: 16
+      DATABASE_URL: 'postgres://postgres:password@db:5432/news_aggr_db'
+    networks:
+      - local-dev
+    ports:
+      - 9000:9000
+    volumes:
+      - .:/home/app
+      - /home/app/node_modules
+
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      INIT_DATABASES: news_aggr_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: news_aggr_db
+      POSTGRES_VERSION: 16
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d news_aggr_db -U postgres"]
+      interval: 2s
+      timeout: 20s
+      retries: 10
+    networks:
+      - local-dev
+    ports:
+      - 15432:5432
+    volumes:
+      # - ./postgres_data:/var/lib/postgresql/data
+      - ./database/scripts/init-scripts:/docker-entrypoint-initdb.d
+
+volumes:
+  postgres_data:
