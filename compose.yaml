@@ -11,7 +11,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: npm run start:dev
+    command: npm run start:devew
     environment:
       API_PORT: 9000
       APP_ENV: development
@@ -23,6 +23,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_VERSION: 16
       DATABASE_URL: 'postgres://postgres:password@db:5432/news_aggr_db'
+      TASK_SCHEDULER_ENABLED: false
+      NEWSAPI_API_KEY: some-secret-key
     networks:
       - local-dev
     ports:

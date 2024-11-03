@@ -9,11 +9,12 @@ export async function up(db: Kysely<any>): Promise<void> {
       id            uuid        PRIMARY KEY DEFAULT uuid_generate_v4(),
       title         text        NOT NULL,
       published_on  timestamptz NOT NULL,
-      state         text        NOT NULL,
       description   text,
       link          text        NOT NULL,
       source        text        NOT NULL,
-      created_on    timestamptz NOT NULL DEFAULT (now() AT TIME ZONE 'utc')
+      created_on    timestamptz NOT NULL DEFAULT (now() AT TIME ZONE 'utc'),
+      state         text,
+      topic         text
     );
   `
   await raw.execute(db)

@@ -2,19 +2,19 @@ import { ArticleRepository } from '../repo/article';
 import { Article, NewArticle } from '../database/schema';
 
 export function createArticleService(articleRepository: ArticleRepository) {
-  return {
-    getAllArticles: async (): Promise<Article[]> => {
-      return articleRepository.findAll();
-    },
+  function create(article: NewArticle): Promise<Article> {
+    return articleRepository.create(article);
+  }
 
-    getArticleById: async (id: string): Promise<Article | undefined> => {
-      return articleRepository.findById(id);
-    },
+  function detail(id: string): Promise<Article | undefined> {
+    return articleRepository.detail(id);
+  }
 
-    createArticle: async (article: NewArticle): Promise<Article> => {
-      return articleRepository.create(article);
-    },
-  };
+  function get(): Promise<Article[]> {
+    return articleRepository.get();
+  }
+
+  return { create, detail, get };
 }
 
 export type ArticleService = ReturnType<typeof createArticleService>;

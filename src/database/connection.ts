@@ -8,6 +8,6 @@ const dialect = new PostgresDialect({
   }),
 });
 
-export const db = new Kysely<Database>({
+export const dbClient = new Kysely<Database>({
   dialect,
 });

@@ -2,29 +2,30 @@ import { Kysely } from 'kysely';
 import { Database, Article, NewArticle } from '../database/schema';
 import { v4 as uuidv4 } from 'uuid';
 
-export function createArticleRepository(db: Kysely<Database>) {
-  return {
-    findAll: async (): Promise<Article[]> => {
-      return db.selectFrom('articles').selectAll().execute();
-    },
+export function createArticleRepository(client: Kysely<Database>) {
 
-    findById: async (id: string): Promise<Article | undefined> => {
-      return db
-        .selectFrom('articles')
-        .selectAll()
-        .where('id', '=', id)
-        .executeTakeFirst();
-    },
-
-    create: async (article: NewArticle): Promise<Article> => {
-      const articleWithId = { ...article, id: uuidv4() };
-      return db
+  function create(article: NewArticle): Promise<Article> {
+    const articleWithId = { ...article, id: uuidv4() };
+      return client
         .insertInto('articles')
         .values(articleWithId)
         .returningAll()
         .executeTakeFirstOrThrow();
-    },
-  };
+  }
+
+  function get(): Promise<Article[]> {
+    return client.selectFrom('articles').selectAll().execute();
+  }
+
+  function detail(id: string): Promise<Article | undefined> {
+    return client
+    .selectFrom('articles')
+    .selectAll()
+    .where('id', '=', id)
+    .executeTakeFirst();
+  }
+
+  return { create, detail, get };
 }
 
 export type ArticleRepository = ReturnType<typeof createArticleRepository>;

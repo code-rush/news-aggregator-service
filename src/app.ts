@@ -1,5 +1,6 @@
 import express from 'express';
 import { container } from './container';
+import runScheduledTasks from './scripts/scheduledTasks';
 
 const app = express();
 app.use(express.json());
@@ -7,13 +8,12 @@ app.use(express.json());
 const { articleService } = container;
 
 app.get('/articles', async (req, res) => {
-  // const articles = await articleService.getAllArticles();
-  // res.json(articles);
-  res.send('Hello World!');
+  const articles = await articleService.get();
+  res.json(articles);
 });
 
 app.get('/articles/:id', async (req, res) => {
-  const article = await articleService.getArticleById(req.params.id);
+  const article = await articleService.detail(req.params.id);
   if (article) {
     res.json(article);
   } else {
@@ -22,8 +22,11 @@ app.get('/articles/:id', async (req, res) => {
 });
 
 app.post('/articles', async (req, res) => {
-  const newArticle = await articleService.createArticle(req.body);
+  const newArticle = await articleService.create(req.body);
   res.status(201).json(newArticle);
 });
+
+// scheduler to fetch articles periodically
+runScheduledTasks();
 
 export default app;
