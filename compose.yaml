@@ -11,7 +11,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: npm run start:devew
+    command: npm run start:dev
     environment:
       API_PORT: 9000
       APP_ENV: development

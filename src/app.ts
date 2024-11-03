@@ -1,6 +1,7 @@
 import express from 'express';
 import { container } from './container';
 import runScheduledTasks from './scripts/scheduledTasks';
+import { ArticleRequestSchema } from './models/article.request';
 
 const app = express();
 app.use(express.json());
@@ -8,7 +9,11 @@ app.use(express.json());
 const { articleService } = container;
 
 app.get('/articles', async (req, res) => {
-  const articles = await articleService.get();
+  /**
+   * TODO:  Query Validation
+   */
+  const { state, topic, keyword } = req.query;
+  const articles = await articleService.get({ state, topic, keyword } as ArticleRequestSchema);
   res.json(articles);
 });
 
