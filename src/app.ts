@@ -14,7 +14,7 @@ app.use(function(_, res, next) {
 
 const { articleService } = container;
 
-app.get('/articles', async (req, res) => {
+app.get('/news', async (req, res) => {
   /**
    * TODO:  Query Validation
    */
@@ -23,7 +23,7 @@ app.get('/articles', async (req, res) => {
   res.json(articles);
 });
 
-app.get('/articles/:id', async (req, res) => {
+app.get('/news/:id', async (req, res) => {
   const article = await articleService.detail(req.params.id);
   if (article) {
     res.json(article);
@@ -32,7 +32,7 @@ app.get('/articles/:id', async (req, res) => {
   }
 });
 
-app.post('/articles', async (req, res) => {
+app.post('/news', async (req, res) => {
   const newArticle = await articleService.create(req.body);
   res.status(201).json(newArticle);
 });
