@@ -6,6 +6,12 @@ import { ArticleRequestSchema } from './models/article.request';
 const app = express();
 app.use(express.json());
 
+app.use(function(_, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 const { articleService } = container;
 
 app.get('/articles', async (req, res) => {

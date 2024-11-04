@@ -17,7 +17,7 @@ export function createArticleRepository(client: Kysely<Database>) {
   function get(params: ArticleRequestSchema): Promise<Article[]> {
     const { state, topic, keyword } = params
     let q = client.selectFrom('articles').selectAll();
-    
+    // Kysely already uses parameterized queries by default, which is one of the best defenses against SQL injection. 
     if (state) {
       q = q.where('state', '=', state);
     }
