@@ -64,8 +64,19 @@ To enable scheduler that runs periodically and retrieves news articles from News
 3. Handle high throughput, surges on a specific day when something is expected to come out.
 
 ### Core Entities
-- Articles
+- Article
+- Topic
+- State
 - User
+
+![image Core Entities](./core-entities.png)
+
+**Indexes**
+- CREATE INDEX idx_articles_published_at ON articles(published_at);
+- CREATE INDEX idx_articles_title ON articles USING gin(to_tsvector('english', title));
+- CREATE INDEX idx_articles_content ON articles USING gin(to_tsvector('english', content));
+
+**NOTE**: Creating inverted indexes could also be done in Elasticsearch.
 
 ### API
 - GET /news/ -> Partial<Articles>
@@ -92,5 +103,3 @@ To enable scheduler that runs periodically and retrieves news articles from News
 To improve accuracy, we could implement either one or in combination of the following:
 1. Use Natural Language Processing (NLP) libraries to perform named entity recognition, which can more reliably identify location names and classifying documents into topics.
 2. Implement context-aware parsing to distinguish between state names used in legislative contexts and other mentions.
-3. Utilize the sources parameter in the API request to focus on state-specific news sources, which may improve the relevance of results
-4. Employ a scoring system that weighs multiple factors (e.g., frequency of state mention, presence in title vs. description) to determine the most likely state for each article.
