@@ -46,6 +46,8 @@ const { articleService } = container;
 /**
  * TODO:  1. Requestion validation and setting up middleware
  *        2. Query Validation
+ *        3. Implement Tracing
+ *        4. Implement logging
  */
 
 app.get('/news', async (req: Request, res: Response) => {
