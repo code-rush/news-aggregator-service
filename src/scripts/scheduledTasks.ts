@@ -9,8 +9,8 @@ function runScheduledTasks() {
     console.log('skipped fetching articles');
   };
 
-  // Then run every 5 minutes
-  // setInterval(fetchArticles, 5 * 60 * 1000);
+  // Then run every 15 minutes
+  setInterval(fetchArticles, 15 * 60 * 1000);
 }
 
 export default runScheduledTasks;

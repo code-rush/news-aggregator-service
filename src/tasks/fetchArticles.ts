@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 async function fetchArticles() {
   try {
-    const page = 1;
+    const page = 1; // TODO: make it such that it doesn't always retrieve the same page
     const pageSize = 25;
     const APIKEY = process.env.NEWSAPI_API_KEY
 
@@ -25,6 +25,10 @@ async function fetchArticles() {
 }
 
 async function importArticles(data: any) {
+  /**
+   * TODO:
+   * 1. Processing Articles allows to implement custom logic for extracting relevant information from the articles and storing them in your database.
+   */
   const { articles } = data;
   const states = ['CA', 'NY', 'FL'];
   const topics = ['Health', 'Education', 'Legislative']; 
