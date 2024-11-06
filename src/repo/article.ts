@@ -15,6 +15,22 @@ export function createArticleRepository(client: Kysely<Database>) {
   }
 
   function get(params: ArticleRequestSchema): Promise<Article[]> {
+    /**
+     * TODO: based on the explained implementation for most optimal solution, the query will change here.
+     *       We will need to LEFT JOIN `states` and `topics` table with `articles.id` and retrieve a list
+     *       of articles for any search keywords.
+     * Perhaps the query may look like this:
+     * SELECT DISTINCT a.* FROM articles a
+     * LEFT JOIN article_states as ON as.article_id = a.id
+     * LEFT JOIN states s ON s.id = as.state_id
+     * LEFT JOIN article_topics at ON at.article_id = a.id
+     * LEFT JOIN topics t ON t.id = at.topic_id
+     * WHERE (state IS NULL OR s.name = state)
+     *  OR (topic IS NULL OR t.name = topic)
+     *  OR (keyword IS NULL OR 
+     *     to_tsvector('english', a.title || ' ' || a.content) @@ to_tsquery('english', keyword))
+     * ORDER BY a.published_at DESC
+     */
     const { state, topic, keyword } = params
     let q = client.selectFrom('articles').selectAll();
     // Kysely already uses parameterized queries by default, which is one of the best defenses against SQL injection. 

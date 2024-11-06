@@ -27,7 +27,10 @@ async function fetchArticles() {
 async function importArticles(data: any) {
   /**
    * TODO:
-   * 1. Processing Articles allows to implement custom logic for extracting relevant information from the articles and storing them in your database.
+   * 1. Processing Articles allows to implement custom logic for extracting relevant 
+   *    information regarding states and topics from the articles and storing them in your database.
+   * 2. Thereafter, we will store these values in their appropriate tables post processing which will be then
+   *    usefull for our retrieval query to optimize search.
    */
   const { articles } = data;
   const states = ['CA', 'NY', 'FL'];
@@ -49,6 +52,7 @@ async function importArticles(data: any) {
       await client
         .insertInto('articles')
         .values(newArticle)
+        // TODO: make link a unique field to ensure deduplication of articles
         // .onConflict((oc) => oc.column('link').doNothing())
         .execute();
     } catch (error) {

@@ -1,6 +1,12 @@
 import { Kysely, sql } from 'kysely'
 
 export async function up(db: Kysely<any>): Promise<void> {
+  /**
+   * To simplify the implementation of the application for prototyping phase, I have incorporated 
+   * values of states and topics within the table.
+   * TODO: Implement separate tables for states and topic such that they can be scaled individually and
+   *       add indexes for more optimized search. (More on indexes explained in the README)
+   */
   const raw = sql`
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 

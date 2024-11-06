@@ -16,7 +16,8 @@ const { articleService } = container;
 
 app.get('/news', async (req, res) => {
   /**
-   * TODO:  Query Validation
+   * TODO:  1. Requestion validation and setting up middleware
+   *        2. Query Validation
    */
   const { state, topic, keyword } = req.query;
   const articles = await articleService.get({ state, topic, keyword } as ArticleRequestSchema);
