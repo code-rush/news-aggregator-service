@@ -11,6 +11,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
     command: npm run start:dev
     environment:
       API_PORT: 9000
@@ -22,6 +24,10 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_USER: postgres
       POSTGRES_VERSION: 16
+      REDIS_DB: 0
+      REDIS_HOST: redis
+      REDIS_PASSWORD: redis
+      REDIS_PORT: 6379
       DATABASE_URL: 'postgres://postgres:password@db:5432/news_aggr_db'
       TASK_SCHEDULER_ENABLED: false
       NEWSAPI_API_KEY: some-secret-key
@@ -56,6 +62,22 @@ services:
     volumes:
       # - ./postgres_data:/var/lib/postgresql/data
       - ./database/scripts/init-scripts:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:latest
+    command: redis-server /usr/local/etc/redis/redis.conf
+    deploy:
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - 36379:6379
 
 volumes:
   postgres_data:
